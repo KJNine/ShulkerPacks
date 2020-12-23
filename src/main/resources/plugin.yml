@@ -2,6 +2,7 @@ name: ShulkerPacks
 version: 1.5.1
 main: me.darkolythe.shulkerpacks.ShulkerPacks
 api-version: 1.13
+softdepend: [WorldGuard, GriefPrevention]
 
 permissions:
   shulkerpacks.use:

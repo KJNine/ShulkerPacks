@@ -1,5 +1,11 @@
 package me.darkolythe.shulkerpacks;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
 import org.bstats.bukkit.Metrics;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -7,11 +13,11 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.*;
-
 public final class ShulkerPacks extends JavaPlugin {
 
     ShulkerListener shulkerlistener;
+    WorldGuardListener compatWorldGuardListener;
+    GriefPreventionListener compatGriefPreventionListener;
 
     String prefix = ChatColor.WHITE.toString() + ChatColor.BOLD.toString() + "[" + ChatColor.BLUE.toString() + "ShulkerPacks" + ChatColor.WHITE.toString() + ChatColor.BOLD.toString() + "] ";
 
@@ -23,7 +29,7 @@ public final class ShulkerPacks extends JavaPlugin {
     List<String> blacklist = new ArrayList<>();
     String defaultname = ChatColor.BLUE + "Shulker Pack";
     boolean shiftclicktoopen = false;
-    boolean canopeninenderchest, canopeninbarrels, canplaceshulker, canopenininventory, canopeninair;
+    boolean canopeninenderchest, canopeninbarrels, canplaceshulker, canopenininventory, canopeninair, openonlyinclaim;
     float volume;
 
     /*
@@ -34,6 +40,10 @@ public final class ShulkerPacks extends JavaPlugin {
         shulkerlistener = new ShulkerListener(this);
 
         getServer().getPluginManager().registerEvents(shulkerlistener, this);
+        
+        if(getServer().getPluginManager().getPlugin("WorldGuard") != null) {
+        	compatWorldGuardListener = new WorldGuardListener(this);
+        }
 
         saveDefaultConfig();
         canopeninchests = getConfig().getBoolean("canopeninchests");
@@ -43,6 +53,7 @@ public final class ShulkerPacks extends JavaPlugin {
         canplaceshulker = getConfig().getBoolean("canplaceshulker", true);
         blacklist = getConfig().getStringList("blacklistedinventories");
         canopeninair = getConfig().getBoolean("canopeninair", true);
+        openonlyinclaim = getConfig().getBoolean("openonlyinclaim", false);
         volume = (float) getConfig().getDouble("shulkervolume", 1.0);
         if (getConfig().getString("defaultname") != null) {
             defaultname = ChatColor.translateAlternateColorCodes('&', getConfig().getString("defaultname"));

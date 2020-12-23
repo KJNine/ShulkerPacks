@@ -7,6 +7,8 @@ canopeninenderchest: true     #false will prevent users from opening shulkerboxe
 canopeninbarrels: true        #false will prevent users from opening shulkerboxes in barrels
 canplaceshulker: true         #false will prevent users from placing shulkerboxes by accident
 
+openonlyinclaim: false        #true will prevent users from opening shulkerpacks unless they lack build+chest-access in a region/claim
+
 defaultname: "&9Shulker Pack"
 shiftclicktoopen: false
 shulkervolume: 1              #0.1 is quiet, 1 is loud

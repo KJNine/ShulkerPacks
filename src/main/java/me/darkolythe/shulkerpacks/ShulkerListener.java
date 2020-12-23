@@ -218,22 +218,28 @@ public class ShulkerListener implements Listener {
                     if (item.getItemMeta() instanceof BlockStateMeta) {
                         BlockStateMeta meta = (BlockStateMeta) item.getItemMeta();
                         if (meta != null && meta.getBlockState() instanceof ShulkerBox) {
-                            ShulkerBox shulker = (ShulkerBox) meta.getBlockState();
-                            Inventory inv;
-                            if (meta.hasDisplayName()) {
-                                inv = Bukkit.createInventory(null, InventoryType.SHULKER_BOX, meta.getDisplayName());
-                            } else {
-                                inv = Bukkit.createInventory(null, InventoryType.SHULKER_BOX, main.defaultname);
-                            }
-                            inv.setContents(shulker.getInventory().getContents());
+                        	ShulkerPackOpenEvent event = new ShulkerPackOpenEvent(player, main, item);
+                        	main.getServer().getPluginManager().callEvent(event);
+                        	if(!event.isCancelled()) {
+                                ShulkerBox shulker = (ShulkerBox) meta.getBlockState();
+                                Inventory inv;
+                                if (meta.hasDisplayName()) {
+                                    inv = Bukkit.createInventory(null, InventoryType.SHULKER_BOX, meta.getDisplayName());
+                                } else {
+                                    inv = Bukkit.createInventory(null, InventoryType.SHULKER_BOX, main.defaultname);
+                                }
+                                inv.setContents(shulker.getInventory().getContents());
 
-                            main.opencontainer.put(player, player.getOpenInventory().getTopInventory());
+                                main.opencontainer.put(player, player.getOpenInventory().getTopInventory());
 
-                            player.openInventory(inv);
-                            player.playSound(player.getLocation(), Sound.BLOCK_SHULKER_BOX_OPEN, main.volume, 1);
-                            main.openshulkers.put(player, item);
-                            main.openinventories.put(player.getUniqueId(), player.getOpenInventory().getTopInventory());
-                            return true;
+                                player.openInventory(inv);
+                                player.playSound(player.getLocation(), Sound.BLOCK_SHULKER_BOX_OPEN, main.volume, 1);
+                                main.openshulkers.put(player, item);
+                                main.openinventories.put(player.getUniqueId(), player.getOpenInventory().getTopInventory());
+                                return true;
+                        	} else {
+                        		player.sendMessage(ChatColor.RED + "You can only open shulker boxes in claims or regions where you can't place them normally.");
+                        	}
                         }
                     }
                 }
